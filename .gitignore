@@ -8,3 +8,4 @@ redis/data/*
 mongo/data/*
 *sqlite3
 draft.txt
+*twistd*
