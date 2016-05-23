@@ -12,28 +12,6 @@ services:
     ports:
       - "5432:5432"
 
-  redis:
-    image: redis:3
-    volumes:
-    - ./redis/data/:/data/
-    ports:
-      - "6379:6379"
-
-  python2:
-    image: iamforeverme/python2:1
-    volumes:
-    - ./crawls/:/src/
-    working_dir: /src/
-
-  mongoDb:
-    image: mongo:3.2
-    environment:
-     - "--auth"
-    volumes:
-     - ./mongo/data/:/data/db/
-    ports:
-      - "27017:27017"
-
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -44,6 +22,4 @@ services:
 
     depends_on:
       - postgresDb
-      - mongoDb
-      - python2
-      - redis
+
