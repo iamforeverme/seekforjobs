@@ -79,9 +79,9 @@ WSGI_APPLICATION = 'web.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'seekforjobs',
+        'NAME': 'ctuser',
         'USER': 'ctuser',
-        'PASSWORD': '4$apps',
+        'PASSWORD': '4apps',
         'HOST': 'postgresDb',
         'PORT': 5432,
     }

@@ -3,8 +3,9 @@ services:
   postgresDb:
     image: postgres:9.5
     environment:
-      - POSTGRES_PASSWORD=bigguy
-      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=4apps
+      - POSTGRES_USER=ctuser
+
     volumes:
       - ./postgresDB/data/:/var/lib/postgresql/data/
       - ./postgresDB/log/:/var/log/postgresql
