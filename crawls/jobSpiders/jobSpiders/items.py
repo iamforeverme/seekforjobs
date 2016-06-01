@@ -9,6 +9,6 @@ import scrapy
 
 
 class JobspidersItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    company = scrapy.Field()
+    position = scrapy.Field()
+    salary = scrapy.Field()

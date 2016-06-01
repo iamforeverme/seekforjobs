@@ -12,6 +12,12 @@ services:
     ports:
       - "5432:5432"
 
+  python2:
+    image: iamforeverme/python2:1
+    volumes:
+    - ./crawls/:/src/
+    working_dir: /src/jobSpiders/
+
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
