@@ -53,8 +53,8 @@ class JobSpider(scrapy.Spider):
 
     def __init__(self):
         scrapy.Spider.__init__(self)
-        # self.verificationErrors = []
-        # self.webdriver = webdriver.Chrome()
+        self.verificationErrors = []
+        self.webdriver = webdriver.Firefox()
 
 
     def parse(self, response):
