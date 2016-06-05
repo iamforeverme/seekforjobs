@@ -9,6 +9,9 @@ import scrapy
 
 
 class JobspidersItem(scrapy.Item):
-    company = scrapy.Field()
-    position = scrapy.Field()
-    salary = scrapy.Field()
+    title = scrapy.Field()
+    url = scrapy.Field()
+    salary_range = scrapy.Field()
+    listing_date = scrapy.Field()
+    location = scrapy.Field()
+    sublocation = scrapy.Field()
