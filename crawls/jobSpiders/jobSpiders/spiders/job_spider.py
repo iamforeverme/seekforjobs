@@ -1,25 +1,33 @@
 # encoding: utf-8
 import scrapy
 import re
-import json
-from selenium import webdriver
-import selenium
 
 from ..items import JobspidersItem
 from scrapy.utils.response import open_in_browser
 from scrapy.shell import inspect_response
+import logging
+logger = logging.getLogger()
 
 
-def getItem(src):
-    if(len(src)!=0):
+def get_item(src):
+    if len(src) != 0:
         return src[0]
     else:
         return ''
+
+
+def serialize(para_dict):
+    para = ""
+    for key in para_dict:
+        para = para + key + "=" + para_dict[key] + "&"
+    return para
+
+
 class JobSpider(scrapy.Spider):
     name = "jobSpiders"
-    allowed_domains = ["http://www.seek.com.au"]
+    #allowed_domains = ["http://www.seek.com.au"]
     keyWord = "python"
-    paraDict  = {
+    para_dict={
        "displaySuburb": "",
        "searchFrom": "active+filters+clear+all+locations",
        "companyID": "",
@@ -46,15 +54,10 @@ class JobSpider(scrapy.Spider):
        "where": "",
        "page": "1",
     }
-    para = ""
-    for key in paraDict:
-        para = para + key + "=" + paraDict[key] + "&"
+    root_urls = r"http://www.seek.com.au/jobs/#"
 
-
-
-    start_urls = [
-        #r"http://www.seek.com.au/jobs/#" +para,
-        r"http://www.seek.com.au/jobs/#dateRange=999&workType=0&industry=&occupation=&graduateSearch=false&salaryFrom=0&salaryTo=999999&salaryType=annual&companyID=&advertiserID=&advertiserGroup=&keywords=python&page=1&displaySuburb=&seoSuburb=&where=&whereId=&whereIsDirty=&isAreaUnspecified=false&location=&area=&nation=&sortMode=KeywordRelevance&searchFrom=&searchType="
+    start_urls=[
+        root_urls + serialize(para_dict),
     ]
     count = 1
 
@@ -78,21 +81,31 @@ class JobSpider(scrapy.Spider):
 #                                     }
 #             )
     def parse(self, response):
-        articleRoot = response.selector.xpath('//article')
-        for article in articleRoot:
-            titleRoot = article.css('.job-title')
-            titleText = titleRoot.xpath('.').extract()[0]
+        # inspect_response(response, self)
+        article_root = response.selector.xpath('//article')
+        next_page = get_item(response.css('.next-page').xpath('./a/@data-page').extract())
+        for article in article_root:
+            title_root = article.css('.job-title')
+            title_text = title_root.xpath('.').extract()[0]
             # fetch job title
-            rawStr = re.search(r'>[\d\D]+</a>', titleText).group(0)
-
+            raw_str = re.search(r'>[\d\D]+</a>', title_text).group(0)
             item = JobspidersItem()
-            item['title'] = re.sub(r'<.*?>', '', rawStr).strip(">")
-            item['url'] = response.urljoin(titleRoot.xpath('@href').extract()[0])
-            item['salary_range'] = getItem(article.css('.salary-range').xpath('text()').extract())
-            item['listing_date'] = getItem(article.css('.listing-date').xpath('text()').extract())
-            item['location'] = getItem(article.css('.location').xpath('text()').extract())
-            item['sublocation'] = getItem(article.css('.sublocation').xpath('text()').extract())
+            item['title'] = re.sub(r'<.*?>', '', raw_str).strip(">")
+            item['url'] = response.urljoin(title_root.xpath('@href').extract()[0])
+            item['salary_range'] = get_item(article.css('.salary-range').xpath('text()').extract())
+            item['listing_date'] = get_item(article.css('.listing-date').xpath('text()').extract())
+            item['location'] = get_item(article.css('.location').xpath('text()').extract())
+            item['sublocation'] = get_item(article.css('.sublocation').xpath('text()').extract())
             yield item
+
+        if len(next_page) != 0:
+            self.para_dict["page"] = next_page
+            next_url = self.root_urls + serialize(self.para_dict)
+            yield scrapy.Request(next_url, callback=self.parse,dont_filter=True)
+
+
+
+
 
         # driver = webdriver.PhantomJS()  # (service_args = service_args)
         #

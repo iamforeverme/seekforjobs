@@ -10,7 +10,6 @@ from selenium.webdriver.support import expected_conditions as EC
 logger = logging.getLogger()
 
 
-
 class PhantomJSMiddleware(object):
     # overwrite process request
     def process_request(self, request, spider):
