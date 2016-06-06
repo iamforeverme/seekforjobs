@@ -66,9 +66,10 @@ COOKIES_ENABLES=False
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'jobSpiders.pipelines.SomePipeline': 300,
-#}
+ITEM_PIPELINES = {
+   'jobSpiders.pipelines.DuplicatesPipeline': 200,
+    'jobSpiders.pipelines.MongoPipeline': 1000,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -90,3 +91,7 @@ COOKIES_ENABLES=False
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+MONGO_URI = "mongoDb"
+MONGO_DATABASE = "scrapy"
+MONGODB_COLLECTION = 'my_items'

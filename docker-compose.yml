@@ -13,11 +13,24 @@ services:
     ports:
       - "5432:5432"
 
+  mongodb:
+    image: mongo:3.2
+    environment:
+     - "--auth"
+    volumes:
+     - ./mongo/data/:/data/db/
+    ports:
+      - "27017:27017"
+#    command: --auth
+
   python2:
     image: iamforeverme/python2:1
     volumes:
     - ./crawls/:/src/
     working_dir: /src/jobSpiders/
+    depends_on:
+      - mongodb
+
 
   web:
     build: .
@@ -26,7 +39,8 @@ services:
       - .:/src
     ports:
       - "8000:8000"
-
     depends_on:
       - postgresDb
+      - python2
+      - mongodb
 
