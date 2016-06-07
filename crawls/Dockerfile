@@ -20,5 +20,6 @@ RUN apt-get install -y fontconfig
 COPY requirements.txt ${DIR}
 WORKDIR ${DIR}
 RUN ["pip","install","-r","requirements.txt"]
+RUN wget
 LABEL version="1.0" \
       description="This image is used for scarpy."

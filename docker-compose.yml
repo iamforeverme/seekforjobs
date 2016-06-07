@@ -23,11 +23,11 @@ services:
       - "27017:27017"
 #    command: --auth
 
-  python2:
-    image: iamforeverme/python2:1
+  crawls:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
-    - ./crawls/:/src/
-    working_dir: /src/jobSpiders/
+      - ./crawls/jobSpiders/:/src
     depends_on:
       - mongodb
 
@@ -41,6 +41,5 @@ services:
       - "8000:8000"
     depends_on:
       - postgresDb
-      - python2
       - mongodb
 
