@@ -68,7 +68,7 @@ COOKIES_ENABLES=False
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'jobSpiders.pipelines.DuplicatesPipeline': 200,
-    'jobSpiders.pipelines.MongoPipeline': 1000,
+   # 'jobSpiders.pipelines.MongoPipeline': 1000,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
