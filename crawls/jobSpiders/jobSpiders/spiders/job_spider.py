@@ -52,7 +52,7 @@ class JobSpider(scrapy.Spider):
        "industry": "",
        "dateRange": "999",
        "where": "",
-       "page": "1",
+       "page": "2",
     }
     root_urls = r"http://www.seek.com.au/jobs/#"
 
@@ -69,17 +69,18 @@ class JobSpider(scrapy.Spider):
 # Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
 # Accept-Encoding: gzip, deflate, sdch
 # Accept-Language: zh-CN,zh;q=0.8"""
-#     def start_requests(self):
-#         header ={}
-#         for line in self.headStr.splitlines():
-#             header[line.split(":")[0]] = line.split(":")[-1]
-#         for url in self.start_urls:
-#             yield scrapy.Request(url, self.parse,
-#                                  headers=header,
-#                                  meta={
-#                                     'PhantomJS': True
-#                                     }
-#             )
+    def start_requests(self):
+        # header ={}
+        # for line in self.headStr.splitlines():
+        #     header[line.split(":")[0]] = line.split(":")[-1]
+        for url in self.start_urls:
+            yield scrapy.Request(url, self.parse,
+                                 #headers=header,
+                                 meta={
+                                    'PhantomJS': True,
+                                    'keywords': self.keyWord,
+                                    }
+            )
     def parse(self, response):
         #inspect_response(response, self)
         article_root = response.selector.xpath('//article')
