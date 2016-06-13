@@ -6,6 +6,8 @@ from ..items import JobspidersItem
 from scrapy.utils.response import open_in_browser
 from scrapy.shell import inspect_response
 import logging
+from math import ceil
+
 logger = logging.getLogger()
 
 
@@ -52,7 +54,7 @@ class JobSpider(scrapy.Spider):
        "industry": "",
        "dateRange": "999",
        "where": "",
-       "page": "2",
+       "page": "1",
     }
     root_urls = r"http://www.seek.com.au/jobs/#"
 
@@ -60,6 +62,8 @@ class JobSpider(scrapy.Spider):
         root_urls + serialize(para_dict),
     ]
     count = 1
+
+    n_crawls = 30
 
 #     headStr=r"""Host: www.seek.com.au
 # Connection: keep-alive
@@ -69,22 +73,46 @@ class JobSpider(scrapy.Spider):
 # Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8
 # Accept-Encoding: gzip, deflate, sdch
 # Accept-Language: zh-CN,zh;q=0.8"""
-    def start_requests(self):
-        # header ={}
-        # for line in self.headStr.splitlines():
-        #     header[line.split(":")[0]] = line.split(":")[-1]
-        for url in self.start_urls:
-            yield scrapy.Request(url, self.parse,
-                                 #headers=header,
+#     def start_requests(self):
+#         # header ={}
+#         # for line in self.headStr.splitlines():
+#         #     header[line.split(":")[0]] = line.split(":")[-1]
+#         for url in self.start_urls:
+#             yield scrapy.Request(url, self.parse,
+#                                  #headers=header,
+#                                  meta={
+#                                     'PhantomJS': self.driver,
+#                                     'keywords': self.keyWord,
+#                                     }
+#             )
+
+    def make_requests_from_url(self,url):
+        return scrapy.Request(url, self.parse,
                                  meta={
                                     'PhantomJS': True,
                                     'keywords': self.keyWord,
-                                    }
-            )
-    def parse(self, response):
+                                    })
+
+    def parse(self,response):
+        n_total = response.selector.css('.animation').xpath('text()').extract()[0]
+        n_single_page = len(response.selector.xpath('//article'))
+        n_pages = int(ceil(float(n_total)/n_single_page))
+        for page in range(1,n_pages,self.n_crawls):
+            para_dict = self.para_dict
+            para_dict["page"] = str(page)
+            next_url = self.root_urls + serialize(para_dict)
+            yield scrapy.Request(next_url,
+                                  callback=self.parse_jobs,
+                                  dont_filter=True,
+                                  meta={
+                                      'PhantomJS': True,
+                                      'keywords': self.keyWord,
+                                  })
+        #inspect_response(response, self)
+
+    def parse_jobs(self, response):
         #inspect_response(response, self)
         article_root = response.selector.xpath('//article')
-        print(article_root)
         next_page = get_item(response.css('.next-page').xpath('./a/@data-page').extract())
         for article in article_root:
             title_root = article.css('.job-title')
@@ -100,10 +128,16 @@ class JobSpider(scrapy.Spider):
             item['sublocation'] = get_item(article.css('.sublocation').xpath('text()').extract())
             yield item
 
-        if len(next_page) != 0:
-            self.para_dict["page"] = next_page
-            next_url = self.root_urls + serialize(self.para_dict)
-            yield scrapy.Request(next_url, callback=self.parse,dont_filter=True)
+        # if len(next_page) != 0:
+        #     self.para_dict["page"] = next_page
+        #     next_url = self.root_urls + serialize(self.para_dict)
+        #     yield scrapy.Request(next_url,
+        #                          callback=self.parse,
+        #                          dont_filter=True,
+        #                          meta={
+        #                              'PhantomJS': self.driver,
+        #                              'keywords': self.keyWord,
+        #                          })
 
 
 
