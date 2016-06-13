@@ -81,8 +81,9 @@ class JobSpider(scrapy.Spider):
 #                                     }
 #             )
     def parse(self, response):
-        # inspect_response(response, self)
+        #inspect_response(response, self)
         article_root = response.selector.xpath('//article')
+        print(article_root)
         next_page = get_item(response.css('.next-page').xpath('./a/@data-page').extract())
         for article in article_root:
             title_root = article.css('.job-title')

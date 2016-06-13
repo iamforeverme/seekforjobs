@@ -25,12 +25,13 @@ services:
 
   crawls:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: scrapy crawl jobSpiders
     volumes:
       - ./crawls/jobSpiders/:/src
     depends_on:
       - mongodb
-
+    ports:
+      - "8080:8080"
 
   web:
     build: .

@@ -22,7 +22,7 @@ class PhantomJSMiddleware(object):
             try:
                 driver = webdriver.PhantomJS(service_args = service_args)
                 try:
-                    driver.set_page_load_timeout(10)
+                    driver.set_page_load_timeout(40)
                     driver.get(request.url)
                 except Exception:
                     logger.debug("Get Time out")

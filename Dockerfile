@@ -1,4 +1,4 @@
-FROM django:1.9.5-python3
+FROM django:1.9.5-python2
 MAINTAINER Kevin
 ENV DIR /src/
 RUN mkdir ${DIR}
