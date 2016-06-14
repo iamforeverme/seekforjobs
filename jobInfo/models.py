@@ -1,13 +1,12 @@
-from django.db import models
+from mongoengine import *
 
 
-class JobInfo(models.Model):
-    onlineDate = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=100, blank=True, default='')
-    location = models.CharField(max_length=100, blank=True, default='')
-    workType = models.CharField(max_length=100, blank=True, default='')
-    salary = models.CharField(max_length=100, blank=True, default='')
-    tags = models.CharField(max_length=100, blank=True, default='')
+class JobInfo(Document):
+    title = StringField(max_length=100, blank=True, default='')
+    listing_date = DateTimeField(help_text='date published')
+    location = StringField(max_length=100, blank=True, default='')
+    sublocation = StringField(max_length=100, blank=True, default='')
+    salary_range = StringField(max_length=100, blank=True, default='')
+    url = StringField(max_length=100, blank=True, default='')
 
-    class Meta:
-        ordering = ('onlineDate',)
+    meta = {"collection": "scrapy_items"}

@@ -25,13 +25,13 @@ services:
 
   crawls:
     build: .
-    command: scrapy crawl jobSpiders
+    command: ls #scrapy crawl jobSpiders
     volumes:
       - ./crawls/jobSpiders/:/src
     depends_on:
       - mongodb
-    ports:
-      - "8080:8080"
+#    ports:
+#      - "8080:8080"
 
   web:
     build: .
@@ -41,6 +41,5 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - postgresDb
       - mongodb
 
