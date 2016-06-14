@@ -97,7 +97,7 @@ class JobSpider(scrapy.Spider):
         n_total = response.selector.css('.animation').xpath('text()').extract()[0]
         n_single_page = len(response.selector.xpath('//article'))
         n_pages = int(ceil(float(n_total)/n_single_page))
-        for page in range(1,n_pages,self.n_crawls):
+        for page in range(1,n_pages+1,self.n_crawls):
             para_dict = self.para_dict
             para_dict["page"] = str(page)
             next_url = self.root_urls + serialize(para_dict)
@@ -127,43 +127,3 @@ class JobSpider(scrapy.Spider):
             item['location'] = get_item(article.css('.location').xpath('text()').extract())
             item['sublocation'] = get_item(article.css('.sublocation').xpath('text()').extract())
             yield item
-
-        # if len(next_page) != 0:
-        #     self.para_dict["page"] = next_page
-        #     next_url = self.root_urls + serialize(self.para_dict)
-        #     yield scrapy.Request(next_url,
-        #                          callback=self.parse,
-        #                          dont_filter=True,
-        #                          meta={
-        #                              'PhantomJS': self.driver,
-        #                              'keywords': self.keyWord,
-        #                          })
-
-
-
-
-
-        # driver = webdriver.PhantomJS()  # (service_args = service_args)
-        #
-        # try:
-        #     driver.set_page_load_timeout(20)
-        #     driver.get(response.url)
-        # except selenium.common.exceptions.TimeoutException:
-        #     pass
-        # #print(  self.driver.page_source)
-        #
-        # print(driver.page_source.find("python"))
-        # filename = 'job' + '.html'
-        # with open(filename, 'wb') as f:
-        #     f.write(driver.page_source.encode('utf-8'))
-        # inspect_response(response, self)
-        # print(response.content.find("python"))
-        # for selector in response.selector.xpath('//div/a'):
-        #     pageIndex = selector.xpath("text()").extract()
-        #     if( u'\u4e0b\u4e00\u9875' in pageIndex):
-        #         url = response.urljoin(selector.xpath("@href").extract()[0])
-        #         yield scrapy.Request(url, callback=self.parse)
-        #
-        # for href in response.selector.xpath('//li/a/@href').extract():
-        #     url = response.urljoin(href)
-        #     yield scrapy.Request(url, callback=self.parse_dir_contents)

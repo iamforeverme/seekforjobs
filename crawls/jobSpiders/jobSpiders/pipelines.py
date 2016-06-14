@@ -33,7 +33,7 @@ class MongoPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        if(self.db.find_one({"url": item["url"]})):
+        if self.db[self.collection_name].find_one({"url": item["url"]}):
             raise DropItem("Duplicate mongo item found: %s" % item)
         self.db[self.collection_name].insert(dict(item))
         return item
