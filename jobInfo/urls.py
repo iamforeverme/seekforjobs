@@ -11,5 +11,6 @@ urlpatterns = [
                                                          serializer_class=JobInfoSerializer,
                                                          permission_classes=()),
                                                          name='user-list'),
+    url(r'^page', views.page),
 
 ]

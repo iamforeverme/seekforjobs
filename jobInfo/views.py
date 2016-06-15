@@ -4,7 +4,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from jobInfo.models import JobInfo
 from jobInfo.serializers import JobInfoSerializer
-
+from celery import debug_task
 
 class JSONResponse(HttpResponse):
     """
@@ -24,5 +24,6 @@ def page(request):
     """
     if request.method == 'GET':
         jobs = JobInfo.objects()[3]
+        debug_task.delay()
         serializer = JobInfoSerializer(jobs)
         return JSONResponse(serializer.data)

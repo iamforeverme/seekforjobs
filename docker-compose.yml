@@ -1,18 +1,5 @@
 version: '2'
 services:
-  postgresDb:
-    image: postgres:9.5
-    environment:
-      - POSTGRES_PASSWORD=4apps
-      - POSTGRES_USER=ctuser
-
-    volumes:
-      - ./postgresDB/data/:/var/lib/postgresql/data/
-      - ./postgresDB/log/:/var/log/postgresql
-      - ./postgresDB/config/:/etc/postgresql
-    ports:
-      - "5432:5432"
-
   mongodb:
     image: mongo:3.2
     environment:
@@ -23,6 +10,12 @@ services:
       - "27017:27017"
 #    command: --auth
 
+  redis:
+    image: redis:3
+    volumes:
+    - ./redis/data/:/data/
+    ports:
+      - "6379:6379"
   crawls:
     build: .
     command: ls #scrapy crawl jobSpiders
@@ -42,4 +35,4 @@ services:
       - "8000:8000"
     depends_on:
       - mongodb
-
+      - redis
