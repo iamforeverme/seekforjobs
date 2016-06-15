@@ -1,8 +1,3 @@
-from django.shortcuts import render
-from django.http import HttpResponse
-import datetime
-from rest_framework import generics
-
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
@@ -10,12 +5,6 @@ from rest_framework.parsers import JSONParser
 from jobInfo.models import JobInfo
 from jobInfo.serializers import JobInfoSerializer
 
-
-class JobList(generics.ListCreateAPIView):
-    serializer_class = JobInfoSerializer
-
-    def get_queryset(self):
-        return JobInfo.objects
 
 class JSONResponse(HttpResponse):
     """
@@ -35,5 +24,5 @@ def page(request):
     """
     if request.method == 'GET':
         jobs = JobInfo.objects()[3]
-        #serializer = JobInfoSerializer(jobs, many=True)
-        return JSONResponse({"title":jobs["title"]})
+        serializer = JobInfoSerializer(jobs)
+        return JSONResponse(serializer.data)
