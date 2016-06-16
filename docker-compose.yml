@@ -31,8 +31,11 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/src
+      - ./supervisord/supervisord.conf:/usr/local/etc/supervisord.conf
+      - ./log:/var/log/
     ports:
       - "8000:8000"
+      - "9001:9001"
     depends_on:
       - mongodb
       - redis
