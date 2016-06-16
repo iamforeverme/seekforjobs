@@ -28,11 +28,11 @@ services:
 
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: bash -c "supervisord ; python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/src
-      - ./supervisord/supervisord.conf:/usr/local/etc/supervisord.conf
-      - ./log:/var/log/
+      - ./supervisord/:/etc/supervisor/
+      - ./log/:/var/log/supervisor/
     ports:
       - "8000:8000"
       - "9001:9001"

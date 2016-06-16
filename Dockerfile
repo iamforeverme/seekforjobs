@@ -4,17 +4,15 @@ ENV DIR /src/
 RUN mkdir ${DIR}
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 627220E7
 RUN echo 'deb http://archive.scrapy.org/ubuntu scrapy main' | tee /etc/apt/sources.list.d/scrapy.list
-RUN apt-get update && apt-get install -y libxml2-dev libxslt1-dev zlib1g-dev libffi-dev libssl-dev
+RUN apt-get update && apt-get install -y libxml2-dev libxslt1-dev zlib1g-dev libffi-dev libssl-dev fontconfig supervisor bzip2
 #VOLUME . ${DIR}
 COPY requirements.txt .
 RUN ["pip","install","-r","requirements.txt"]
 ENV PHANTOMJS_REMOTE https://npm.taobao.org/mirrors/phantomjs/phantomjs-2.1.1-linux-x86_64.tar.bz2
 ENV PHANTOMJS phantomjs-2.1.1-linux-x86_64.tar.bz2
 #RUN wget --no-check-certificate -b -o $PHANTOMJS $PHANTOMJS_REMOTE
-RUN apt-get install -y fontconfig
 COPY $PHANTOMJS .
 RUN ls -al $PHANTOMJS
-RUN apt-get install -y bzip2
 RUN tar -jxvf $PHANTOMJS
 RUN chmod a+x /phantomjs-2.1.1-linux-x86_64/bin/phantomjs
 RUN ln -sf /phantomjs-2.1.1-linux-x86_64/bin/phantomjs /usr/bin/phantomjs
