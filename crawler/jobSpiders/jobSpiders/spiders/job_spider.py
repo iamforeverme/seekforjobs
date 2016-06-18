@@ -28,7 +28,6 @@ def serialize(para_dict):
 class JobSpider(scrapy.Spider):
     name = "jobSpiders"
     #allowed_domains = ["http://www.seek.com.au"]
-    keyWord = "python"
     para_dict={
        "displaySuburb": "",
        "searchFrom": "active+filters+clear+all+locations",
@@ -37,7 +36,7 @@ class JobSpider(scrapy.Spider):
        "graduateSearch": "false",
        "seoSuburb": "",
        "advertiserGroup": "",
-       "keywords": keyWord,
+       "keywords": "",
        "occupation": "",
        "isAreaUnspecified": "false",
        "searchType": "",
@@ -63,7 +62,12 @@ class JobSpider(scrapy.Spider):
     ]
     count = 1
 
-    n_crawls = 30
+    def __init__(self,keyWord="python",crawl_num=1,n_crawls=30):
+        super(JobSpider, self).__init__()
+        self.n_crawls=n_crawls
+        self.crawl_num = crawl_num
+        self.keyWord=keyWord
+        self.para_dict["keywords"]=keyWord
 
 #     headStr=r"""Host: www.seek.com.au
 # Connection: keep-alive
@@ -97,7 +101,7 @@ class JobSpider(scrapy.Spider):
         n_total = response.selector.css('.animation').xpath('text()').extract()[0]
         n_single_page = len(response.selector.xpath('//article'))
         n_pages = int(ceil(float(n_total)/n_single_page))
-        for page in range(1,n_pages+1,self.n_crawls):
+        for page in range(self.crawl_num,n_pages+1,self.n_crawls):
             para_dict = self.para_dict
             para_dict["page"] = str(page)
             next_url = self.root_urls + serialize(para_dict)

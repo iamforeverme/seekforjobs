@@ -9,9 +9,9 @@ https://docs.djangoproject.com/en/1.9/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
-
 import os
 import mongoengine
+from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -153,3 +153,33 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
+
+
+
+# This will make sure the app is always imported when
+# Django starts so that shared_task will use this app.
+CELERY_IMPORTS=("jobInfo.celery",)
+def generate_schedule(n_threads,delay):
+    scheduler={}
+    for thread in range(1,n_threads+1):
+        name="task_"+str(thread)
+        info_dict={}
+        info_dict['task']='task_scrapy_jobs'
+        info_dict['schedule']=delay
+        info_dict['args']=("program",thread,n_threads)
+        scheduler[name]=info_dict
+    return scheduler
+CELERYBEAT_SCHEDULE=generate_schedule(5,timedelta(minutes=30))
+
+# CELERYBEAT_SCHEDULE = {
+#     'add-every-30-seconds': {
+#         'task': 'task_scrapy_jobs',
+#         'schedule': timedelta(seconds=30),
+#         'args': ("program", 1 , 1)
+#     },
+# }
+
+
+#spider inforamtion
+SPIDER_DIR = r'../crawler/jobSpiders'
+os.environ['SCRAPY_SETTINGS_MODULE'] = 'crawler.jobSpiders.jobSpiders.settings'

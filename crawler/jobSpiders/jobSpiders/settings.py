@@ -96,3 +96,7 @@ MONGO_URI = "mongoDb"
 MONGO_DATABASE = "scrapy"
 MONGO_PORT = 27017
 MONGODB_COLLECTION = 'scrapy_items'
+
+import sys
+sys.path.append(r'/src/crawler/jobSpiders')
+
