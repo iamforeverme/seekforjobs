@@ -56,18 +56,28 @@ class JobSpider(scrapy.Spider):
        "page": "1",
     }
     root_urls = r"http://www.seek.com.au/jobs/#"
-
-    start_urls=[
-        root_urls + serialize(para_dict),
-    ]
     count = 1
 
-    def __init__(self,keyWord="python",crawl_num=1,n_crawls=30):
-        super(JobSpider, self).__init__()
-        self.n_crawls=n_crawls
-        self.crawl_num = crawl_num
-        self.keyWord=keyWord
-        self.para_dict["keywords"]=keyWord
+    def __init__(self, *a, **kw):
+        super(JobSpider, self).__init__(*a, **kw)
+
+        if "n_crawls" in kw.keys():
+            self.n_crawls=kw["n_crawls"]
+            self.crawl_num = kw["crawl_num"]
+            self.key_word=kw["key_word"]
+            self.para_dict["keywords"]=self.key_word
+            self.start_urls=[
+                self.root_urls + serialize(self.para_dict),
+            ]
+        else:
+            self.n_crawls = 1
+            self.crawl_num = 1
+            self.key_word = "python"
+        self.para_dict["keywords"] = self.key_word
+        self.start_urls = [
+            self.root_urls + serialize(self.para_dict),
+        ]
+
 
 #     headStr=r"""Host: www.seek.com.au
 # Connection: keep-alive
@@ -91,14 +101,16 @@ class JobSpider(scrapy.Spider):
 #             )
 
     def make_requests_from_url(self,url):
+        print("make_requests_from_url :"+self.key_word)
         return scrapy.Request(url, self.parse,
                                  meta={
                                     'PhantomJS': True,
-                                    'keywords': self.keyWord,
+                                    'keywords': self.key_word,
                                     })
 
     def parse(self,response):
         n_total = response.selector.css('.animation').xpath('text()').extract()[0]
+        n_total = ''.join([num for num in n_total if num!= ','])
         n_single_page = len(response.selector.xpath('//article'))
         n_pages = int(ceil(float(n_total)/n_single_page))
         for page in range(self.crawl_num,n_pages+1,self.n_crawls):
@@ -110,7 +122,7 @@ class JobSpider(scrapy.Spider):
                                   dont_filter=True,
                                   meta={
                                       'PhantomJS': True,
-                                      'keywords': self.keyWord,
+                                      'keywords': self.key_word,
                                   })
         #inspect_response(response, self)
 

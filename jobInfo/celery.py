@@ -19,7 +19,7 @@ logger = get_task_logger(__name__)
 @app.task(name="debug_task")
 def debug_task(key_word, n_crawls):
     logger.info("Call Page {0} : {1}".format(key_word,str(n_crawls)))
-    #run_spider(key_word, n_crawls)
+    run_spider(key_word, 1, n_crawls)
 
 
 from celery.task.schedules import crontab

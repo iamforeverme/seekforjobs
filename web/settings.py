@@ -166,10 +166,10 @@ def generate_schedule(n_threads,delay):
         info_dict={}
         info_dict['task']='task_scrapy_jobs'
         info_dict['schedule']=delay
-        info_dict['args']=("program",thread,n_threads)
+        info_dict['args']=("software+engineer",thread,n_threads)
         scheduler[name]=info_dict
     return scheduler
-CELERYBEAT_SCHEDULE=generate_schedule(5,timedelta(minutes=30))
+CELERYBEAT_SCHEDULE=generate_schedule(5,timedelta(minutes=5))
 
 # CELERYBEAT_SCHEDULE = {
 #     'add-every-30-seconds': {

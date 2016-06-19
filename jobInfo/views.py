@@ -26,7 +26,6 @@ def page(request):
         jobs = JobInfo.objects()[3]
         key_word = "java"
         n_thread=5
-        for n_crawls in range(n_thread):
-            debug_task.delay(key_word, n_crawls)
+        debug_task.delay(key_word, n_thread)
         serializer = JobInfoSerializer(jobs)
         return JSONResponse(serializer.data)

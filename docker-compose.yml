@@ -20,7 +20,7 @@ services:
     build: .
     command: ls #scrapy crawl jobSpiders
     volumes:
-      - ./crawls/jobSpiders/:/src
+      - ./crawler/jobSpiders/:/src
     depends_on:
       - mongodb
 #    ports:
