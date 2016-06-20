@@ -17,7 +17,7 @@ class PhantomJSMiddleware(object):
                 # service_args.append('--proxy=' + request.meta['proxy'][7:])
                 driver = webdriver.PhantomJS(service_args=service_args)
                 try:
-                    driver.set_page_load_timeout(50)
+                    driver.set_page_load_timeout(10)
                     driver.get(request.url)
                 except Exception:
                     logger.debug("Get Time out")

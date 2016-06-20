@@ -28,3 +28,7 @@ def run_spider(key_word,crawl_num,n_crawls):
     crawler = JobCrawlerScript(spider,key_word=key_word,crawl_num=crawl_num,n_crawls=n_crawls)
     crawler.start()
     crawler.join()
+
+
+if __name__=="__main__":
+    run_spider("software", 1, 1)

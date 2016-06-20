@@ -14,6 +14,9 @@ BOT_NAME = 'jobSpiders'
 SPIDER_MODULES = ['jobSpiders.spiders']
 NEWSPIDER_MODULE = 'jobSpiders.spiders'
 
+DEPTH_PRIORITY = 1
+SCHEDULER_DISK_QUEUE = 'scrapy.squeues.PickleFifoDiskQueue'
+SCHEDULER_MEMORY_QUEUE = 'scrapy.squeues.FifoMemoryQueue'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'jobSpiders (+http://www.yourdomain.com)'
@@ -96,6 +99,8 @@ MONGO_URI = "mongoDb"
 MONGO_DATABASE = "scrapy"
 MONGO_PORT = 27017
 MONGODB_COLLECTION = 'scrapy_items'
+
+
 
 import sys
 sys.path.append(r'/src/crawler/jobSpiders')

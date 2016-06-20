@@ -109,16 +109,16 @@ class JobSpider(scrapy.Spider):
                                     })
 
     def parse(self,response):
+        "In the whole process, this function will be triggered once"
         n_total = response.selector.css('.animation').xpath('text()').extract()[0]
         n_total = ''.join([num for num in n_total if num!= ','])
         n_single_page = len(response.selector.xpath('//article'))
         n_pages = int(ceil(float(n_total)/n_single_page))
-        for page in range(self.crawl_num,n_pages+1,self.n_crawls):
+        for page in range(5,6):#range(self.crawl_num,n_pages+1,self.n_crawls):
             para_dict = self.para_dict
             para_dict["page"] = str(page)
             next_url = self.root_urls + serialize(para_dict)
-            yield scrapy.Request(next_url,
-                                  callback=self.parse_jobs,
+            yield scrapy.Request(next_url,callback=self.parse_jobs,
                                   dont_filter=True,
                                   meta={
                                       'PhantomJS': True,
@@ -128,8 +128,8 @@ class JobSpider(scrapy.Spider):
 
     def parse_jobs(self, response):
         #inspect_response(response, self)
+        print("parse items :" + self.key_word)
         article_root = response.selector.xpath('//article')
-        next_page = get_item(response.css('.next-page').xpath('./a/@data-page').extract())
         for article in article_root:
             title_root = article.css('.job-title')
             title_text = title_root.xpath('.').extract()[0]
