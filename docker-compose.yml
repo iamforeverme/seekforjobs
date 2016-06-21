@@ -18,7 +18,7 @@ services:
       - "6379:6379"
   crawls:
     build: .
-    command: ls # scrapy crawl jobSpiders
+    command: ls #scrapy crawl jobSpiders
     volumes:
       - ./crawler/jobSpiders/:/src
     depends_on:
