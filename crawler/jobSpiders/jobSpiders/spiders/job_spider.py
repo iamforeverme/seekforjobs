@@ -60,12 +60,12 @@ class JobSpider(scrapy.Spider):
 
     def __init__(self, *a, **kw):
         super(JobSpider, self).__init__(*a, **kw)
-
         if "n_crawls" in kw.keys():
             self.n_crawls=kw["n_crawls"]
             self.crawl_num = kw["crawl_num"]
             self.key_word=kw["key_word"]
-            self.para_dict["keywords"]=self.key_word
+            self.para_dict["keywords"] = self.key_word
+            self.para_dict["page"]=str(self.crawl_num)
             self.start_urls=[
                 self.root_urls + serialize(self.para_dict),
             ]
@@ -110,25 +110,6 @@ class JobSpider(scrapy.Spider):
 
     def parse(self,response):
         "In the whole process, this function will be triggered once"
-        n_total = response.selector.css('.animation').xpath('text()').extract()[0]
-        n_total = ''.join([num for num in n_total if num!= ','])
-        n_single_page = len(response.selector.xpath('//article'))
-        n_pages = int(ceil(float(n_total)/n_single_page))
-        for page in range(5,6):#range(self.crawl_num,n_pages+1,self.n_crawls):
-            para_dict = self.para_dict
-            para_dict["page"] = str(page)
-            next_url = self.root_urls + serialize(para_dict)
-            yield scrapy.Request(next_url,callback=self.parse_jobs,
-                                  dont_filter=True,
-                                  meta={
-                                      'PhantomJS': True,
-                                      'keywords': self.key_word,
-                                  })
-        #inspect_response(response, self)
-
-    def parse_jobs(self, response):
-        #inspect_response(response, self)
-        print("parse items :" + self.key_word)
         article_root = response.selector.xpath('//article')
         for article in article_root:
             title_root = article.css('.job-title')
@@ -143,3 +124,20 @@ class JobSpider(scrapy.Spider):
             item['location'] = get_item(article.css('.location').xpath('text()').extract())
             item['sublocation'] = get_item(article.css('.sublocation').xpath('text()').extract())
             yield item
+        cur_page=get_item(response.selector.css('.current-page').xpath('./span/text()').extract())
+        n_total = response.selector.css('.animation').xpath('text()').extract()[0]
+        n_total = ''.join([num for num in n_total if num!= ','])
+        n_single_page = len(response.selector.xpath('//article'))
+        n_pages = int(ceil(float(n_total)/n_single_page))
+        next_page=int(cur_page)+int(self.n_crawls)
+        if next_page<n_pages:
+            para_dict = self.para_dict
+            para_dict["page"] = str(next_page)
+            next_url = self.root_urls + serialize(para_dict)
+            yield scrapy.Request(next_url,callback=self.parse,
+                                  dont_filter=True,
+                                  meta={
+                                      'PhantomJS': True,
+                                      'keywords': self.key_word,
+                                  })
+        #inspect_response(response, self)
