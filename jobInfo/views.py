@@ -4,7 +4,10 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 from jobInfo.models import JobInfo
 from jobInfo.serializers import JobInfoSerializer
-from celery import debug_task
+from rest_framework.decorators import api_view
+from rest_framework import status
+from rest_framework.response import Response
+from celery import task_scrapy_jobs
 
 class JSONResponse(HttpResponse):
     """
@@ -17,15 +20,16 @@ class JSONResponse(HttpResponse):
 
 
 # Create your views here.
+@api_view(['POST'])
 @csrf_exempt
 def init_data(request):
     """
     List all job information in database
     """
     if request.method == 'POST':
-        # jobs = JobInfo.objects()[3]
-        key_word = "software+engineer"
-        # n_thread=3
-        # debug_task.delay(key_word, n_thread)
-        # serializer = JobInfoSerializer(jobs)
-        return JSONResponse({"status":1})
+        data = request.data
+        key_word=data["key_word"]
+        n_threads = 1
+        for thread in range(1, n_threads + 1):
+            task_scrapy_jobs.delay(key_word, thread, n_threads)
+        return Response(data={"key_word":key_word},status=status.HTTP_200_OK)

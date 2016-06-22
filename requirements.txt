@@ -8,3 +8,4 @@ selenium==2.53.2
 mongoengine==0.10.6
 django-rest-framework-mongoengine==3.3.0
 billiard==3.3.0.20
+httpie==0.9.3

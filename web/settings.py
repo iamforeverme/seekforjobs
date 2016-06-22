@@ -123,7 +123,7 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
 
@@ -169,7 +169,7 @@ def generate_schedule(n_threads,delay):
         info_dict['args']=("software+engineer",thread,n_threads)
         scheduler[name]=info_dict
     return scheduler
-CELERYBEAT_SCHEDULE=generate_schedule(1,timedelta(minutes=60))
+CELERYBEAT_SCHEDULE=generate_schedule(1,timedelta(minutes=120))
 
 # CELERYBEAT_SCHEDULE = {
 #     'add-every-30-seconds': {
