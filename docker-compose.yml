@@ -16,13 +16,13 @@ services:
     - ./redis/data/:/data/
     ports:
       - "6379:6379"
-  crawls:
-    build: .
-    command: ls #scrapy crawl jobSpiders
-    volumes:
-      - ./crawler/jobSpiders/:/src
-    depends_on:
-      - mongodb
+#  crawls:
+#    build: .
+#    command: scrapy crawl jobSpiders
+#    volumes:
+#      - ./crawler/jobSpiders/:/src
+#    depends_on:
+#      - mongodb
 #    ports:
 #      - "8080:8080"
 

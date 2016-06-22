@@ -26,6 +26,12 @@ def serialize(para_dict):
     return para
 
 
+def get_item(key, element):
+    if key in element:
+        return element[key]
+    else:
+        return ""
+
 class JobSpider(scrapy.Spider):
     name = "jobSpiders"
     #allowed_domains = ["http://www.seek.com.au"]
@@ -88,18 +94,19 @@ class JobSpider(scrapy.Spider):
                                     'keywords': self.key_word,
                                     })
 
+
     def parse(self,response):
         "In the whole process, this function will be triggered once"
         content_str = response.body[response.body.find('('):response.body.rfind(')')].strip('()')
         content_json = json.loads(content_str)
         for element in content_json['data']:
             item = JobspidersItem()
-            item['title'] = element['title']
+            item['title'] = get_item('title',element)
             item['url'] = element['tracking']['clickUrl']
-            item['salary_range'] = element['salary']
-            item['listing_date'] = element['listingDate']
-            item['location'] = element['locationWhereValue']
-            item['sublocation'] = element['suburb']
+            item['salary_range'] = get_item('salary',element)
+            item['listing_date'] = get_item('listingDate',element)
+            item['location'] = get_item('locationWhereValue',element)
+            item['sublocation'] = get_item('suburb',element)
             yield item
         n_total=int(content_json['totalCount'])
         n_single_page = len(content_json['data'])

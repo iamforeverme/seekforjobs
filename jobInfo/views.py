@@ -18,14 +18,14 @@ class JSONResponse(HttpResponse):
 
 # Create your views here.
 @csrf_exempt
-def page(request):
+def init_data(request):
     """
     List all job information in database
     """
-    if request.method == 'GET':
-        jobs = JobInfo.objects()[3]
-        key_word = "java"
-        n_thread=5
-        debug_task.delay(key_word, n_thread)
-        serializer = JobInfoSerializer(jobs)
-        return JSONResponse(serializer.data)
+    if request.method == 'POST':
+        # jobs = JobInfo.objects()[3]
+        key_word = "software+engineer"
+        # n_thread=3
+        # debug_task.delay(key_word, n_thread)
+        # serializer = JobInfoSerializer(jobs)
+        return JSONResponse({"status":1})
