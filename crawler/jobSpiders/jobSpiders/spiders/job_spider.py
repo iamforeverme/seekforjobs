@@ -102,7 +102,11 @@ class JobSpider(scrapy.Spider):
         for element in content_json['data']:
             item = JobspidersItem()
             item['title'] = get_item('title',element)
-            item['url'] = element['tracking']['clickUrl']
+            url = element['tracking']['clickUrl']
+            if isinstance(url, basestring):
+                userqueryid=url.split('?')[1].split('&')[0].split('=')[1]
+                job_id=url.split('?')[1].split('&')[2].split('=')[1]
+                item['url']=r"http://www.seek.com.au/job/{0}?pos=19&type=standard&engineConfig=&userqueryid={1}&tier=no_tier&whereid=".format(job_id,userqueryid)
             item['salary_range'] = get_item('salary',element)
             item['listing_date'] = get_item('listingDate',element)
             item['location'] = get_item('locationWhereValue',element)
