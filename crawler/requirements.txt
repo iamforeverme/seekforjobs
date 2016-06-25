@@ -1,3 +1,0 @@
-supervisor==3.3.0
-pymongo==3.2.2
-selenium==2.53.2
