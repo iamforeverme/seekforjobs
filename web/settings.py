@@ -84,6 +84,8 @@ DATABASES = {
     }
 }
 
+# TEST_RUNNER = 'jobInfo.tests.NoSQLTestRunner'
+
 _MONGODB_USER = ''
 _MONGODB_PASSWD = ''
 _MONGODB_HOST = 'mongoDb'
@@ -91,8 +93,9 @@ _MONGODB_NAME = 'scrapy'
 # _MONGODB_DATABASE_HOST = \
 #     'mongodb://%s:%s@%s/%s' \
 #     % (_MONGODB_USER, _MONGODB_PASSWD, _MONGODB_HOST, _MONGODB_NAME)
+_MONGODB_DATABASE_STR='mongodb://%s/%s'
 _MONGODB_DATABASE_HOST = \
-    'mongodb://%s/%s' \
+    _MONGODB_DATABASE_STR     \
     % (_MONGODB_HOST, _MONGODB_NAME)
 
 mongoengine.connect(_MONGODB_NAME, host=_MONGODB_DATABASE_HOST)
@@ -120,6 +123,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
+    'PAGE_SIZE': 10,
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [

@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^job_list', generics.ListCreateAPIView.as_view(queryset=JobInfo.objects.all(),
                                                          serializer_class=JobInfoSerializer,
                                                          permission_classes=()),
-                                                         name='user-list'),
+                                                         name='job-list'),
     url(r'^init_data', views.init_data),
 
 ]
