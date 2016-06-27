@@ -9,11 +9,16 @@ class JobInfoTestCase(SimpleTestCase):
     mongodb_name = 'testsuite'
     def setUp(self):
         disconnect()
-        # host = settings._MONGODB_DATABASE_STR \
-        #        % (settings._MONGODB_HOST, self.mongodb_name)
-        host = settings._MONGODB_DATABASE_STR \
-               % ("localhost", self.mongodb_name)
-        connect(self.mongodb_name, host=host)
+        try:
+            # try docker mongo
+            host = settings._MONGODB_DATABASE_STR \
+                   % (settings._MONGODB_HOST, self.mongodb_name)
+            connect(self.mongodb_name, host=host)
+        except Exception as e:
+            # if fail, turn to localhost
+            host = settings._MONGODB_DATABASE_STR \
+                   % ("localhost", self.mongodb_name)
+            connect(self.mongodb_name, host=host)
 
     def tearDown(self):
         connection = get_connection()
