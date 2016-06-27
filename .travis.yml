@@ -5,6 +5,9 @@ sudo: required
 python:
   - "2.7"
 
+env:
+- CI=1
+
 services:
   - mongodb
   - redis-server

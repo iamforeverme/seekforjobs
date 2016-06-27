@@ -88,7 +88,12 @@ DATABASES = {
 
 _MONGODB_USER = ''
 _MONGODB_PASSWD = ''
-_MONGODB_HOST = 'mongoDb'
+
+b_is_ci_envionment = os.environ.get('SET_CI', 0)
+if b_is_ci_envionment:
+    _MONGODB_HOST = 'localhost'
+else:
+    _MONGODB_HOST = 'mongoDb'
 _MONGODB_NAME = 'scrapy'
 # _MONGODB_DATABASE_HOST = \
 #     'mongodb://%s:%s@%s/%s' \
