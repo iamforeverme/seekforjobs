@@ -9,8 +9,10 @@ class JobInfoTestCase(SimpleTestCase):
     mongodb_name = 'testsuite'
     def setUp(self):
         disconnect()
+        # host = settings._MONGODB_DATABASE_STR \
+        #        % (settings._MONGODB_HOST, self.mongodb_name)
         host = settings._MONGODB_DATABASE_STR \
-               % (settings._MONGODB_HOST, self.mongodb_name)
+               % ("localhost", self.mongodb_name)
         connect(self.mongodb_name, host=host)
 
     def tearDown(self):
