@@ -1,0 +1,82 @@
+@import "styles/var.scss";
+
+$x-padding: 30px;
+$y-padding: 20px;
+$input-length: 240px;
+$input-height: 60px;
+
+.btnGrp {
+    width: 80px;
+    height: $workspace-h;
+    padding-top: 38px;
+    float: left;
+    .btn {
+        font-size: 20px;
+        color: $theme-color-input;
+        margin-bottom: 35px;
+        border: 3px solid $theme-color-input;
+        width:48px;
+        height: 48px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 42px;
+        cursor: pointer;
+    }
+    .active {
+        color: white;
+        background-color: $theme-color-btn;
+    }
+}
+
+.searchBox {
+    width: $input-length;
+    height: $workspace-h;
+    padding: $y-padding 0;
+    float:left;
+}
+
+.input, .submit {
+    width: 100%;
+    height: $input-height;
+    font-size: 20px;
+    color: white;
+}
+
+.input {
+    margin: 0;
+    padding: 0;
+    margin: 12px 0;
+    border-width: 0 0 1px 0;
+    border-bottom-style: solid;
+    border-bottom-color: white;
+    line-height: $input-height;
+    text-indent: .5em;
+    background-color: $theme-color-input;
+
+    &:focus {
+      //border-color: $active-color;
+      //background-color: lighten($input-bg-color, 10%);
+      outline: 0;
+    }
+}
+
+.submit {
+    margin-top: 40px;
+    border-width: 0;
+    border-radius: 10px;
+    background-color: $theme-color-btn;
+}
+
+.input::-webkit-input-placeholder {
+    color: white;
+}
+
+.slogon {
+    float:left;
+    padding-top:50px;
+    padding-left: 60px;
+    p {
+        color: white;
+        font-size: 42px;
+    }
+}

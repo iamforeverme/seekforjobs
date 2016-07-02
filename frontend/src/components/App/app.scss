@@ -1,0 +1,15 @@
+@import "styles/var.scss";
+
+.navbar {
+    background-color: $bg-color;
+    height: $nav-h;
+}
+
+
+.workspace {
+    height: $workspace-h;
+    background: url("./images/banner.png");
+    .inner {
+        padding: 0 60px;
+    }
+}

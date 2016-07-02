@@ -1,0 +1,8 @@
+@mixin non-selectable {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+@mixin clickable {
+    cursor: pointer;
+}

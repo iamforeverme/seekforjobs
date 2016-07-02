@@ -1,0 +1,23 @@
+@import "styles/mixin";
+@import "styles/var.scss";
+
+.nav {
+    @include non-selectable();
+    width: 100%;
+    height: $nav-h;
+    margin: 0 0 0 0;
+    padding: 0 0 0 60px;
+}
+
+.navTab {
+    float: left;
+    margin-right: 40px;
+    height: $nav-h;
+    text-align: center;
+    line-height: $nav-h + 4px;
+    color: white;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    @include clickable();
+}
