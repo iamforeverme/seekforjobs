@@ -7,6 +7,7 @@ from jobInfo.models import JobInfo
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    url(r'^$', views.index, name='index'),
     url(r'^job_list', generics.ListCreateAPIView.as_view(queryset=JobInfo.objects.all(),
                                                          serializer_class=JobInfoSerializer,
                                                          permission_classes=()),

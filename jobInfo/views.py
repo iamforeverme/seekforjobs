@@ -8,6 +8,7 @@ from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.response import Response
 from celery import task_scrapy_jobs
+from django.shortcuts import render
 
 class JSONResponse(HttpResponse):
     """
@@ -33,3 +34,6 @@ def init_data(request):
         for thread in range(1, n_threads + 1):
             task_scrapy_jobs.delay(key_word, thread, n_threads)
         return Response(data={"key_word":key_word},status=status.HTTP_200_OK)
+
+def index(request):
+    return render(request, 'jobInfo/index.html', None)
