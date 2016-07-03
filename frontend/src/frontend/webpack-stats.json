@@ -1,0 +1,1 @@
+{"status":"done","chunks":{"bundle":[{"name":"bundle.js","publicPath":"/distbundle.js","path":"/src/frontend/dist/bundle.js"}],"common":[{"name":"common.js","publicPath":"/distcommon.js","path":"/src/frontend/dist/common.js"}]},"publicPath":"/dist"}

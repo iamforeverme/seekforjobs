@@ -1,5 +1,7 @@
 import webpack from "webpack";
 import path from "path";
+import BundleTracker from "webpack-bundle-tracker";
+
 const
     {CommonsChunkPlugin, UglifyJsPlugin} = webpack.optimize,
     {ProvidePlugin, DefinePlugin} = webpack;
@@ -26,7 +28,7 @@ export default {
             exclude: /node_modules/
         }, {
             test  : /\.(jpe?g|svg|png)$/,
-            loader: "url?limit=10000&name=/images/[hash:20].[ext]",
+            loader: "url?limit=10000&name=/static/images/[hash:20].[ext]",
             exclude: /node_modules/
         }]
     },
@@ -40,6 +42,7 @@ export default {
         ]
     },
     plugins: [
+        new BundleTracker({filename: "./webpack-stats.json"}),
         new webpack.NoErrorsPlugin(),
         new webpack.ProvidePlugin({
             React   : "react",

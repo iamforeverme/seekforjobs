@@ -9,6 +9,6 @@ export default merge(base, {
     },
     output: {
         path: path.resolve(__dirname, "../dist"),
-        publicPath: "/dist"
+        publicPath: "/dist/"
     }
 });

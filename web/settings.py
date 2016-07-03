@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_mongoengine',
+    'webpack_loader',
     'jobInfo.apps.JobinfoConfig'
 ]
 
@@ -192,3 +193,17 @@ CELERYBEAT_SCHEDULE=generate_schedule(1,timedelta(minutes=120))
 #spider inforamtion
 SPIDER_DIR = r'../crawler/jobSpiders'
 os.environ['SCRAPY_SETTINGS_MODULE'] = 'crawler.jobSpiders.jobSpiders.settings'
+
+# webpack integration
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'frontend/dist'), # We do this so that django's collectstatic copies or our bundles to the STATIC_ROOT or syncs them to whatever storage we use.
+)
+
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'BUNDLE_DIR_NAME': './',
+        'STATS_FILE': os.path.join(BASE_DIR, 'frontend/webpack-stats.json'),
+    }
+}

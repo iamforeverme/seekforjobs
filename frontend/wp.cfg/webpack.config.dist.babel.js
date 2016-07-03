@@ -12,8 +12,7 @@ export default merge(base, {
         bundle: path.resolve(__dirname, "../src/index")
     },
     output: {
-        path: path.resolve(__dirname, "../dist"),
-        publicPath: "/dist"
+        path: path.resolve(__dirname, "../dist")
     },
     plugins: [
         new DefinePlugin({
