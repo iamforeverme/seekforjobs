@@ -6,7 +6,9 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 import pymongo
 from scrapy.exceptions import DropItem
-
+import time
+from time import mktime
+from datetime import datetime
 
 class MongoPipeline(object):
 
@@ -35,7 +37,9 @@ class MongoPipeline(object):
     def process_item(self, item, spider):
         if self.db[self.collection_name].find_one({"url": item["url"]}):
             raise DropItem("Duplicate mongo item found: %s" % item)
-        self.db[self.collection_name].insert(dict(item))
+        item_dict=dict(item)
+        item_dict["listing_date"]=datetime.fromtimestamp(mktime(time.strptime(item_dict["listing_date"], "%Y-%m-%dT%H:%M:%SZ")))
+        self.db[self.collection_name].insert(item_dict)
         return item
 
 
