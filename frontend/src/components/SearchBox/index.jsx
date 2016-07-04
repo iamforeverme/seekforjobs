@@ -20,6 +20,12 @@ export default class SearchBox extends React.Component {
         }
     }
     render() {
+        const {
+            keyword,
+            location,
+            period,
+            changeHandler
+        } = this.props;
         return (
             <div>
                 <div className={style.btnGrp}>
@@ -37,13 +43,23 @@ export default class SearchBox extends React.Component {
                     action="" name="trend" role="form">
                     <input id="keyword" type="text"
                             className={style.input}
-                            placeholder="Key words"/>
+                            placeholder="Key words"
+                            value={keyword}
+                            onChange={(e) => changeHandler('keyword', e.target.value)}/>
                     <input id="location" type="text"
                             className={style.input}
-                            placeholder="Location"/>
-                    <input id="period" type="text"
+                            placeholder="Location"
+                            value={location}
+                            onChange={(e) => changeHandler('location', e.target.value)}/>
+                    <select id="period"
                             className={style.input}
-                            placeholder="Period"/>
+                            value={period}
+                            onChange={(e) => changeHandler('period', e.target.value)}>
+                             <option value="week">last 1 week</option>
+                             <option value="month">last 1 month</option>
+                             <option value="tri-month">last 3 months</option>
+                             <option value="year">last 1 year</option>
+                    </select>
                     <input className={style.submit}
                         type="submit" value="Search"/>
                 </form>
