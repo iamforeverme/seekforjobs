@@ -11,6 +11,8 @@ from celery import task_scrapy_jobs
 from django.shortcuts import render
 from rest_framework.views import APIView
 import time,datetime
+import numpy as np
+import json
 
 class JSONResponse(HttpResponse):
     """
@@ -53,10 +55,27 @@ class AnalyzeJobCount(APIView):
     def get(self, request, start_time,end_time,key_word,location,format=None):
         """
         Return a list of all users.
-        http://127.0.0.1:8000/jobInfo/analyze/count/2013-11-12/2014-12-5/software/sydney
+        http://127.0.0.1:8000/jobInfo/analyze/count/2016-06-03/2016-07-04/front/sydney
         """
-        start_time_date_time=time.mktime(time.strptime(start_time,"%Y-%m-%d"))
-        end_time_date_time = time.mktime(time.strptime(end_time, "%Y-%m-%d"))
-        tdelta=datetime.timedelta(seconds=end_time_date_time-start_time_date_time).days
+        start_time_stamp=time.mktime(time.strptime(start_time,"%Y-%m-%d"))
+        end_time_stamp = time.mktime(time.strptime(end_time, "%Y-%m-%d"))
+        deta_days=datetime.timedelta(seconds=end_time_stamp-start_time_stamp).days
+        start_time_datetime=datetime.datetime.fromtimestamp(start_time_stamp)
+        end_time_datetime=datetime.datetime.fromtimestamp(end_time_stamp)
+        jobs=JobInfo.objects(listing_date__lte=end_time_datetime,
+                             listing_date__gte=start_time_datetime,
+                             location__icontains=location,
+                             title__icontains=key_word).all()
 
-        return Response(tdelta)
+        jobs_stat=np.ndarray(shape=(len(jobs), 1), dtype=np.float)
+        for (i,job) in enumerate(jobs):
+            jobs_stat[i]=time.mktime(job.listing_date.timetuple())
+        hist_day, bin_edges=np.histogram(jobs_stat,bins=deta_days)
+        day_stat={}
+        for days,edge in zip(hist_day.tolist(),bin_edges):
+            day_stat[str(datetime.datetime.fromtimestamp(edge))]=days
+        hist_day_dict={"days":day_stat}
+        # print("haha")
+        # job_serializer=JobInfoSerializer(jobs, many=True)
+
+        return Response(json.dumps(hist_day_dict))
