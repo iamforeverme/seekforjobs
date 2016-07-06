@@ -13,5 +13,6 @@ urlpatterns = [
                                                          permission_classes=()),
                                                          name='job-list'),
     url(r'^init_data', views.init_data),
+    url(r'^analyze/count/(?P<start_time>[\w\W]+)/(?P<end_time>[\w\W]+)/(?P<key_word>\w+)/(?P<location>\w+)',views.AnalyzeJobCount.as_view())
 
 ]
