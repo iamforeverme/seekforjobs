@@ -10,3 +10,4 @@ django-rest-framework-mongoengine==3.3.0
 billiard==3.3.0.20
 httpie==0.9.3
 django-webpack-loader==0.3.0
+numpy==1.11.1
