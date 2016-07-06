@@ -40,6 +40,7 @@ def init_data(request):
         return Response(data={"key_word":key_word},status=status.HTTP_200_OK)
 
 
+
 def index(request):
     return render(request, 'jobInfo/index.html', None)
 
@@ -62,20 +63,60 @@ class AnalyzeJobCount(APIView):
         deta_days=datetime.timedelta(seconds=end_time_stamp-start_time_stamp).days
         start_time_datetime=datetime.datetime.fromtimestamp(start_time_stamp)
         end_time_datetime=datetime.datetime.fromtimestamp(end_time_stamp)
-        jobs=JobInfo.objects(listing_date__lte=end_time_datetime,
-                             listing_date__gte=start_time_datetime,
-                             location__icontains=location,
-                             title__icontains=key_word).all()
+
+        if key_word!="all" and location!="all":
+            jobs=JobInfo.objects(listing_date__lte=end_time_datetime,
+                                 listing_date__gte=start_time_datetime,
+                                 location__icontains=location,
+                                 title__icontains=key_word).all()
+        elif key_word=="all" and location=="all":
+            jobs = JobInfo.objects(listing_date__lte=end_time_datetime,
+                                   listing_date__gte=start_time_datetime)
+        elif key_word=="all" and location!="all":
+            jobs = JobInfo.objects(listing_date__lte=end_time_datetime,
+                                   listing_date__gte=start_time_datetime,
+                                   location__icontains = location)
+        else:
+            jobs = JobInfo.objects(listing_date__lte=end_time_datetime,
+                                   listing_date__gte=start_time_datetime,
+                                   title__icontains=key_word)
 
         jobs_stat=np.ndarray(shape=(len(jobs), 1), dtype=np.float)
         for (i,job) in enumerate(jobs):
             jobs_stat[i]=time.mktime(job.listing_date.timetuple())
         hist_day, bin_edges=np.histogram(jobs_stat,bins=deta_days)
-        day_stat={}
-        for days,edge in zip(hist_day.tolist(),bin_edges):
-            day_stat[str(datetime.datetime.fromtimestamp(edge))]=days
-        hist_day_dict={"days":day_stat}
-        # print("haha")
-        # job_serializer=JobInfoSerializer(jobs, many=True)
 
-        return Response(json.dumps(hist_day_dict))
+        def count_period(start_day,stat,days):
+            # This function is to compute job number within a span, given start day
+            start_day_str = start_day.strftime("%Y-%m-%d")
+            if start_day_str in stat.keys():
+                stat[start_day_str] = stat[start_day_str] + days
+            else:
+                stat[start_day_str] = days
+
+        day_stat = {}
+        week_stat = {}
+        month_stat = {}
+        year_stat = {}
+        for days,edge in zip(hist_day.tolist(),bin_edges):
+            edge_dt=datetime.datetime.fromtimestamp(edge)
+            edge_str=edge_dt.strftime("%Y-%m-%d")
+            day_stat[edge_str]=days
+
+            # the first day of a week
+            count_period(start_day=edge_dt - datetime.timedelta(days=edge_dt.weekday()),
+                         stat=week_stat,
+                         days=days)
+            # the first day of a month
+            count_period(start_day=edge_dt - datetime.timedelta(days=int(edge_dt.strftime("%d"))-1),
+                         stat=month_stat,
+                         days=days)
+            # the first day of a year
+            count_period(start_day=datetime.datetime(year=edge_dt.year,month=1,day=1),
+                         stat=year_stat,
+                         days=days)
+        hist_day_dict={"day":day_stat,"week":week_stat,"month":month_stat,"year":year_stat}
+        return Response(hist_day_dict)
+
+# print("haha")
+# job_serializer=JobInfoSerializer(jobs, many=True)
