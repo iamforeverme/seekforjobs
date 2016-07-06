@@ -12,7 +12,9 @@ export default class App extends React.Component {
                 <div className={style.navbar}>
                     <TitleBar />
                 </div>
-                <section className={style.workspace}>
+                <section
+                    className={this.props.location.pathname==='/'?
+                                `${style.workspace} ${style.homeBg}`:style.workspace}>
                     <div className="container">
                         <div className={style.inner}>
                             {this.props.children}

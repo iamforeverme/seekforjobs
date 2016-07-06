@@ -24,7 +24,8 @@ export default class SearchBox extends React.Component {
             keyword,
             location,
             period,
-            changeHandler
+            changeHandler,
+            searchHandler
         } = this.props;
         return (
             <div>
@@ -61,7 +62,8 @@ export default class SearchBox extends React.Component {
                              <option value="year">last 1 year</option>
                     </select>
                     <input className={style.submit}
-                        type="submit" value="Search"/>
+                            value="Search"
+                            onClick={() => searchHandler()}/>
                 </form>
 
                 <div className={style.slogon}>

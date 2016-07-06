@@ -1,6 +1,7 @@
 import SearchBox from 'components/SearchBox';
 import {changeKeyword, changeLocation, changePeriod} from 'actions';
 import {connect} from 'react-redux';
+import {browserHistory} from 'react-router';
 
 
 const mapStateToProps = state => {
@@ -27,6 +28,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
               default:
                   return;
           }
+      },
+      searchHandler: () => {
+          browserHistory.push("/area");
       }
   }
 }

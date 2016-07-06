@@ -1,0 +1,57 @@
+@import "styles/var.scss";
+$x-padding: 30px;
+$y-padding: 20px;
+$input-length: 160px;
+$input-height: 40px;
+
+.searchBar {
+    width: 100%;
+    height: 60px;
+    margin: 10px 0 10px 0;
+
+}
+
+
+.formGrp{
+    margin-right: 10px;
+}
+
+
+// .input {
+//     margin: 0;
+//     padding: 0;
+//     margin: 12px 0;
+//     border-width: 0 0 1px 0;
+//     border-bottom-style: solid;
+//     border-bottom-color: $theme-color-input;
+//     line-height: $input-height;
+//     text-indent: .5em;
+//     background-color: $theme-color-btn;
+//     float: left;
+//     margin-right: 20px;
+//     &:focus {
+//       //border-color: $active-color;
+//       //background-color: lighten($input-bg-color, 10%);
+//       outline: 0;
+//     }
+// }
+//
+//
+//
+// .input, .submit {
+//     width: $input-length;
+//     height: $input-height;
+//     font-size: 20px;
+//     color: white;
+// }
+//
+// .submit {
+//     margin-top: 40px;
+//     border-width: 0;
+//     border-radius: 10px;
+//     background-color: $theme-color-btn;
+// }
+//
+// .input::-webkit-input-placeholder {
+//     color: white;
+// }
