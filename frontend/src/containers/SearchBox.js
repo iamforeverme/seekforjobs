@@ -1,5 +1,5 @@
 import SearchBox from 'components/SearchBox';
-import {changeKeyword, changeLocation, changePeriod} from 'actions';
+import {changeKeyword, changeLocation, changePeriod, queryJob, updateJobData} from 'actions';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 
@@ -30,7 +30,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           }
       },
       searchHandler: () => {
-          browserHistory.push("/area");
+         dispatch(queryJob());
+         //dispatch(updateJobData({'week':0}))
+         browserHistory.push("/area");
       }
   }
 }

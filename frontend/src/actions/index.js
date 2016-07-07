@@ -13,11 +13,13 @@ export const queryJob = () => {
     return {
         types: [types.QUERY_JOB_REQUEST, types.QUERY_JOB_SUCCESS, types.QUERY_JOB_ERROR],
         callAPI: (store) => {
-            return fetch('')
+            return fetch('/analyze/count/2016-06-03/2016-07-04/front/sydney')
                     .then(resp => resp.json())
                     .then(json => {
-                        console.log(json);
+                        console.log("yangyang",json);
+                        store.dispatch(updateJobData(json));
                     });
+
         }
     }
 }

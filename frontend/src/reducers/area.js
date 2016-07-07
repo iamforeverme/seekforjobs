@@ -1,7 +1,14 @@
 import * as actions from "constants/actions";
 import {combineReducers} from 'redux';
 
-export function job(state=[], action){
+const defaultJobData = {
+    day: {},
+    week: {},
+    month: {},
+    year: {}
+}
+export function job(state=defaultJobData, action){
+    debugger;
     switch (action.type) {
         case actions.UPDATE_JOB_DATA:
             if(action.error){
