@@ -12,7 +12,7 @@ export default {
     },
     output: {
         filename: "[name].js",
-        chunkFilename: "[id].chunk.js"
+        chunkFilename: "[name].chunk.js"
     },
     module: {
         loaders: [{

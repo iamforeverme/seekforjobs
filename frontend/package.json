@@ -3,7 +3,7 @@
     "start": "npm run dev",
     "dev": "webpack-dev-server --config ./wp.cfg/webpack.config.dev.babel.js --content-base . --host 0.0.0.0 --port 8080 --hot --inline --progress --colors",
     "utest": "webpack-dev-server  --config ./wp.cfg/webpack.config.tests.babel.js --content-base tests/unit/ --host 0.0.0.0 --port 9090 --hot --inline --progress --colors",
-    "dist": "rm -rf dist/* && touch dist/.placeholder && webpack --config ./wp.cfg/webpack.config.dist.babel.js --progress --colors && mv dist/static/images dist/images && rm -rf dist/static"
+    "dist": "rm -rf dist/* && touch dist/.placeholder && cp assets/* dist && webpack --config ./wp.cfg/webpack.config.dist.babel.js --progress --colors && mv dist/static/images dist/images && rm -rf dist/static"
   },
   "author": "Yang Yang",
   "devDependencies": {
