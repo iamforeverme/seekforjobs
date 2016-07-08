@@ -1,6 +1,6 @@
 import style from './area-trend.scss';
 import SearchBarContainer from 'containers/SearchBar';
-import AreaChart from './AreaChart';
+import AreaChartContainer from 'containers/AreaChart';
 import EmploymentChartContainer from 'containers/EmploymentChart';
 import IncomeChart from './IncomeChart';
 
@@ -10,7 +10,7 @@ export default class AreaTrend extends React.Component{
         return (
             <div>
                 <SearchBarContainer />
-                <AreaChart />
+                <AreaChartContainer />
                 <EmploymentChartContainer />
                 <IncomeChart />
             </div>

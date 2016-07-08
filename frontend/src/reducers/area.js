@@ -8,7 +8,6 @@ const defaultJobData = {
     year: {}
 }
 export function job(state=defaultJobData, action){
-    debugger;
     switch (action.type) {
         case actions.UPDATE_JOB_DATA:
             if(action.error){

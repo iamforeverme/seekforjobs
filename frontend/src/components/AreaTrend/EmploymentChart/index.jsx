@@ -7,25 +7,28 @@ export default class EmploymentChart extends React.Component{
         chart.series[0].addPoint({x: 10, y: 12});
     }
     render(){
-        const {
-            job
-        } = this.props;
-        console.log("yangyang job", job);
+        // const {
+        //     jobData
+        // } = this.props;
 
-        let categories = _.map(job.day, (num, date) => {
-            return date;
-        });
-        let data = _.map(job.day, (num, date) => {
-            return num;
-        });
-        // var config = {
-        //     xAxis: {
-        //         categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        //     },
-        //     series: [{
-        //         data: [29.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 295.6, 454.4]
-        //     }]
-        // };
+        //TEMP
+        let jobData = {
+            day: {
+                '2016-05-01': 2,
+                '2016-05-02': 4,
+                '2016-05-03': 2,
+                '2016-05-04': 7,
+                '2016-05-05': 1
+            }
+        }
+
+        let categories = [],
+            data = [];
+
+        _.map(jobData.day, (num, date) => {
+            categories.push(date);
+            data.push(num);
+        })
 
         let config = {
             xAxis: {
@@ -36,7 +39,7 @@ export default class EmploymentChart extends React.Component{
             }]
         };
 
-        console.log("yangyang", config);
+        console.log("yangyang highchart config:", config);
 
         return (
 

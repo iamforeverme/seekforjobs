@@ -30,7 +30,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           }
       },
       searchHandler: () => {
-         dispatch(queryJob());
+         //dispatch(queryJob());
          //dispatch(updateJobData({'week':0}))
          browserHistory.push("/area");
       }

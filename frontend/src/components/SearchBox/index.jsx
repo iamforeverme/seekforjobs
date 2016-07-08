@@ -62,7 +62,7 @@ export default class SearchBox extends React.Component {
                              <option value="year">last 1 year</option>
                     </select>
                     <input className={style.submit}
-                            value="Search"
+                            defaultValue="Search"
                             onClick={() => searchHandler()}/>
                 </form>
 

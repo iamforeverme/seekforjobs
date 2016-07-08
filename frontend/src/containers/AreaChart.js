@@ -1,10 +1,9 @@
-import EmploymentChart from 'components/AreaTrend/EmploymentChart';
 import {connect} from 'react-redux';
+import AreaChart from 'components/AreaTrend/AreaChart';
 
 const mapStateToProps = state => {
-    console.log("yangyang state", state);
     return {
-        jobData: state.area.job
+        location: state.searchCondition.location
     }
 }
 
@@ -17,4 +16,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(EmploymentChart);
+)(AreaChart);

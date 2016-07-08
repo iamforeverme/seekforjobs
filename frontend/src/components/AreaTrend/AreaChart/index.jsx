@@ -1,17 +1,29 @@
 import style from './area-chart.scss';
 
+const MODE = {
+    state: {
+        region: 'AU',
+        displayMode: 'regions',
+        resolution: 'provinces',
+    },
+    city: {
+        region: 'AU',
+        displayMode: 'markers'
+    }
+}
+
+
 export default class AreaChart extends React.Component{
     constructor(props){
         super(props);
 
     }
     drawRegionsMap() {
-        console.log('draw', this);
         if(!google.visualization)
             return;
         let data = google.visualization.arrayToDataTable([
-          ['State', 'Popularity'],
-          ['Queensland', 200]
+              ['State', 'Number of jobs'],
+              ['Queensland', 200]
         ]);
 
         let options = {
@@ -25,7 +37,7 @@ export default class AreaChart extends React.Component{
         this.chart.draw(data, options);
     }
     componentDidMount(){
-        console.log('mount', this);
+        //TODO: can not load twice
         google.charts.load('current', {'packages':['geochart']});
         google.charts.setOnLoadCallback(() => this.drawRegionsMap());
     }
