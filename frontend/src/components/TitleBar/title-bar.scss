@@ -20,4 +20,21 @@
     white-space: nowrap;
     overflow: hidden;
     @include clickable();
+    &:hover{
+        border-bottom: 2px solid white;
+    }
+}
+
+.link{
+    display: block;
+    text-decoration: none;
+    color: white;
+    &:hover, &:visited, &:focus {
+        color:white;
+        text-decoration: none;
+    }
+}
+
+.active{
+
 }
