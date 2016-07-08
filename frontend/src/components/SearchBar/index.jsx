@@ -16,20 +16,22 @@ export default class SearchBar extends React.Component {
                 <form className="form-inline">
                     <div className={`form-group ${style.formGrp}`}>
                         <label className="sr-only">Keywords</label>
-                        <input className="form-control"
+                        <input id="searchbar-keyword"
+                            className="form-control"
                             placeholder="Keywords"
                             value={keyword}
-                            onChange={(e)=> changeHandler('keyword', e.target,value)}/>
+                            onChange={(e)=> changeHandler('keyword', e.target.value)}/>
                     </div>
                     <div className={`form-group ${style.formGrp}`}>
                         <label className="sr-only">Location</label>
-                        <input className="form-control"
+                        <input id="searchbar-location"
+                            className="form-control"
                             placeholder="Location"
                             value={location}
-                            onChange={(e)=> changeHandler('location', e.target,value)}/>
+                            onChange={(e)=> changeHandler('location', e.target.value)}/>
                     </div>
                     <div className={`form-group ${style.formGrp}`}>
-                        <div className="btn-group">
+                        <div className="btn-group" id="searchbar-period">
                             <button type="button" className={`btn btn-default ${style.dropdown}`}>{period?PERIODS[period]:"Period"}</button>
                             <button type="button"
                                     className="btn btn-default dropdown-toggle"
