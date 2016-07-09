@@ -104,7 +104,7 @@ class JobInfoTestCase(SimpleTestCase):
         JobInfo.objects.create(_id=self.get_test_id(),
                            title="Backend software engineer",
                            location="Merben",
-                               salary_index="950000",
+                           salary_index="950000",
                            listing_date=datetime.datetime(year=2016, month=6, day=17)
                            )
 
@@ -115,5 +115,5 @@ class JobInfoTestCase(SimpleTestCase):
                         format='json')
         response.render()
         # the accurateness of the algorithm could be improved in the future
-        expected_result = '[750000,950000]'
+        expected_result = '{"week":{"2016-06-13":850000},"year":{"2016-01-01":850000},"day":{"2016-06-17":950000,"2016-06-15":750000},"month":{"2016-06-01":850000}}'
         self.assertEqual(expected_result, response.content)

@@ -142,7 +142,46 @@ class AnalyzeJobSalary(APIView):
         jobs = get_jobs_from_url(start_time_stamp, end_time_stamp, key_word, location)
 
         salary_list = [job.salary_index for job in jobs if job.salary_index!=0]
+        day_stat = {}
+        week_stat = {}
+        month_stat = {}
+        year_stat = {}
 
-        return Response(salary_list)
+        def count_period(start_day,stat,job_salary):
+            # This function is to compute job number within a span, given start day
+            start_day_str = start_day.strftime("%Y-%m-%d")
+            if start_day_str in stat.keys():
+                pass
+            else:
+                stat[start_day_str] = []
+            stat[start_day_str].append(job_salary)
+
+        for job in jobs:
+            job_salary = job.salary_index
+            if job_salary == 0:
+                continue
+            jobs_time = job.listing_date
+
+            count_period(start_day=jobs_time,
+                         stat=day_stat,
+                         job_salary=job_salary)
+            # the first day of a week
+            count_period(start_day=jobs_time - datetime.timedelta(days=jobs_time.weekday()),
+                         stat=week_stat,
+                         job_salary=job_salary)
+            # the first day of a month
+            count_period(start_day=jobs_time - datetime.timedelta(days=int(jobs_time.strftime("%d")) - 1),
+                         stat=month_stat,
+                         job_salary=job_salary)
+            # the first day of a year
+            count_period(start_day=datetime.datetime(year=jobs_time.year, month=1, day=1),
+                         stat=year_stat,
+                         job_salary=job_salary)
+
+        hist_day_dict = {"day": day_stat, "week": week_stat, "month": month_stat, "year": year_stat}
+        for hist in hist_day_dict:
+            for key in hist_day_dict[hist]:
+                hist_day_dict[hist][key]=int(np.average(hist_day_dict[hist][key]))
+        return Response(hist_day_dict)
 # print("haha")
 # job_serializer=JobInfoSerializer(jobs, many=True)
