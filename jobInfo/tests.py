@@ -97,14 +97,14 @@ class JobInfoTestCase(SimpleTestCase):
         JobInfo.objects.create(_id=self.get_test_id(),
                                title="Front software engineer",
                                location="All Sydney",
-                               salary_range="$15-35k",
+                               salary_index="750000",
                                listing_date=datetime.datetime(year=2016, month=6, day=15)
                                )
 
         JobInfo.objects.create(_id=self.get_test_id(),
                            title="Backend software engineer",
                            location="Merben",
-                            salary_range="$600 per day",
+                               salary_index="950000",
                            listing_date=datetime.datetime(year=2016, month=6, day=17)
                            )
 
@@ -115,5 +115,5 @@ class JobInfoTestCase(SimpleTestCase):
                         format='json')
         response.render()
         # the accurateness of the algorithm could be improved in the future
-        expected_result = '[15000,144000]'
+        expected_result = '[750000,950000]'
         self.assertEqual(expected_result, response.content)

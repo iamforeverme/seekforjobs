@@ -12,6 +12,7 @@ class JobspidersItem(scrapy.Item):
     title = scrapy.Field()
     url = scrapy.Field()
     salary_range = scrapy.Field()
+    salary_index = scrapy.Field()
     listing_date = scrapy.Field()
     location = scrapy.Field()
     sublocation = scrapy.Field()
