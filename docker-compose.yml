@@ -28,7 +28,7 @@ services:
 
   web:
     build: .
-    command: bash -c "supervisord ; python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "supervisord ; cd frontend; npm run dist; cd ..; python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/src
       - ./supervisord/:/etc/supervisor/
