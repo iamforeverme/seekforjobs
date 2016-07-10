@@ -1,6 +1,7 @@
 import * as actions from 'constants/actions';
+import {combineReducers} from 'redux';
 
-export default function keyword(state='all', action) {
+export function keyword(state='', action) {
     switch (action.type) {
         case actions.CHANGE_KEYWORD:
             return action.payload;
@@ -10,7 +11,7 @@ export default function keyword(state='all', action) {
     }
 }
 
-export default function location(state='all', action){
+export function location(state='', action){
     switch (action.type) {
         case actions.CHANGE_LOCATION:
             return action.payload;
@@ -20,7 +21,7 @@ export default function location(state='all', action){
     }
 }
 
-export default function period(state='week', action){
+export function period(state='', action){
     switch (action.type) {
         case actions.CHANGE_PERIOD:
             return action.payload;
@@ -29,3 +30,10 @@ export default function period(state='week', action){
             return state;
     }
 }
+
+const searchCondition = combineReducers({
+    keyword,
+    location,
+    period
+});
+export default searchCondition;

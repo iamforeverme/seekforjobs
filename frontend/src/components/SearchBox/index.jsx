@@ -1,5 +1,6 @@
 import style from './search-box.scss';
 import classnames from "utils/classnames";
+import {PERIODS} from 'constants/period';
 
 const TREND = "trend";
 const SKILL = "skill";
@@ -24,16 +25,19 @@ export default class SearchBox extends React.Component {
             keyword,
             location,
             period,
-            changeHandler
+            changeHandler,
+            searchHandler
         } = this.props;
         return (
             <div>
                 <div className={style.btnGrp}>
-                    <div className={classnames(style.btn, this.state.category===TREND?style.active:"")}
+                    <div id="trend-btn"
+                        className={classnames(style.btn, this.state.category===TREND?style.active:"")}
                          onClick={()=>this.toggleCategory(TREND)}>
                         <i className="fa fa-line-chart"></i>
                     </div>
-                    <div className={classnames(style.btn, this.state.category===SKILL?style.active:"")}
+                    <div id="skill-btn"
+                        className={classnames(style.btn, this.state.category===SKILL?style.active:"")}
                         onClick={()=>this.toggleCategory(SKILL)}>
                         <i className="fa fa-stack-exchange"></i>
                     </div>
@@ -55,13 +59,17 @@ export default class SearchBox extends React.Component {
                             className={style.input}
                             value={period}
                             onChange={(e) => changeHandler('period', e.target.value)}>
-                             <option value="week">last 1 week</option>
-                             <option value="month">last 1 month</option>
-                             <option value="tri-month">last 3 months</option>
-                             <option value="year">last 1 year</option>
+                            {
+                                _.map(PERIODS, (desc, val) => {
+                                    return (
+                                        <option value={val} key={val}>{desc}</option>
+                                    )
+                                })
+                            }
                     </select>
                     <input className={style.submit}
-                        type="submit" value="Search"/>
+                            defaultValue="Search"
+                            onClick={() => searchHandler()}/>
                 </form>
 
                 <div className={style.slogon}>

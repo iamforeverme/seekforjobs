@@ -1,10 +1,9 @@
-import SearchBox from 'components/SearchBox';
-import {changeKeyword, changeLocation, changePeriod, queryJob, updateJobData} from 'actions';
+import SearchBar from 'components/SearchBar';
 import {connect} from 'react-redux';
-import {browserHistory} from 'react-router';
+import {changeKeyword, changeLocation, changePeriod} from 'actions';
 
-
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
+    console.log("yangyang, search bar state", state)
     return {
         keyword: state.searchCondition.keyword,
         location: state.searchCondition.location,
@@ -30,15 +29,12 @@ const mapDispatchToProps = (dispatch, ownProps) => {
           }
       },
       searchHandler: () => {
-         //dispatch(queryJob());
-         //dispatch(updateJobData({'week':0}))
-         browserHistory.push("/area");
+
       }
   }
 }
 
-
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(SearchBox);
+)(SearchBar);

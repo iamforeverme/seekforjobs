@@ -65,10 +65,12 @@ $input-height: 60px;
     border-width: 0;
     border-radius: 10px;
     background-color: $theme-color-btn;
+    text-align: center;
+    cursor: pointer;
 }
 
 .input::-webkit-input-placeholder {
-    color: white;
+    color: #0a3e3a;
 }
 
 .slogon {

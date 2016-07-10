@@ -7,13 +7,13 @@ export default class TitleBar extends React.Component{
         return (
             <div className="container">
                 <ul className={style.nav}>
-                    <Link to="/">
-                        <li className={style.navTab}>
-                            Home
-                        </li>
-                    </Link>
                     <li className={style.navTab}>
-                        <Link to={'/area'}>
+                        <Link to="/" className={style.link}>
+                            Home
+                        </Link>
+                    </li>                    
+                    <li className={style.navTab}>
+                        <Link to={'/area'} className={style.link}>
                         <i className="fa fa-line-chart"></i>
                         {" "}Area trend
                         </Link>
