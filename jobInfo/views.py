@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
@@ -12,7 +13,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 import time,datetime
 import numpy as np
-import json
+import re
 
 class JSONResponse(HttpResponse):
     """
@@ -45,6 +46,29 @@ def index(request):
     return render(request, 'jobInfo/index.html', None)
 
 
+def get_jobs_from_url(start_time_stamp,end_time_stamp,key_word,location):
+    start_time_datetime = datetime.datetime.fromtimestamp(start_time_stamp)
+    end_time_datetime = datetime.datetime.fromtimestamp(end_time_stamp)
+
+    if key_word != "all" and location != "all":
+        jobs = JobInfo.objects(listing_date__lte=end_time_datetime,
+                               listing_date__gte=start_time_datetime,
+                               location__icontains=location,
+                               title__icontains=key_word).all()
+    elif key_word == "all" and location == "all":
+        jobs = JobInfo.objects(listing_date__lte=end_time_datetime,
+                               listing_date__gte=start_time_datetime)
+    elif key_word == "all" and location != "all":
+        jobs = JobInfo.objects(listing_date__lte=end_time_datetime,
+                               listing_date__gte=start_time_datetime,
+                               location__icontains=location)
+    else:
+        jobs = JobInfo.objects(listing_date__lte=end_time_datetime,
+                               listing_date__gte=start_time_datetime,
+                               title__icontains=key_word)
+    return jobs
+
+
 class AnalyzeJobCount(APIView):
     """
     View to list all users in the system.
@@ -58,32 +82,14 @@ class AnalyzeJobCount(APIView):
         Return a list of all users.
         http://127.0.0.1:8000/jobInfo/analyze/count/2016-06-03/2016-07-04/front/sydney
         """
-        start_time_stamp=time.mktime(time.strptime(start_time,"%Y-%m-%d"))
+        start_time_stamp = time.mktime(time.strptime(start_time, "%Y-%m-%d"))
         end_time_stamp = time.mktime(time.strptime(end_time, "%Y-%m-%d"))
-        deta_days=datetime.timedelta(seconds=end_time_stamp-start_time_stamp).days
-        start_time_datetime=datetime.datetime.fromtimestamp(start_time_stamp)
-        end_time_datetime=datetime.datetime.fromtimestamp(end_time_stamp)
-
-        if key_word!="all" and location!="all":
-            jobs=JobInfo.objects(listing_date__lte=end_time_datetime,
-                                 listing_date__gte=start_time_datetime,
-                                 location__icontains=location,
-                                 title__icontains=key_word).all()
-        elif key_word=="all" and location=="all":
-            jobs = JobInfo.objects(listing_date__lte=end_time_datetime,
-                                   listing_date__gte=start_time_datetime)
-        elif key_word=="all" and location!="all":
-            jobs = JobInfo.objects(listing_date__lte=end_time_datetime,
-                                   listing_date__gte=start_time_datetime,
-                                   location__icontains = location)
-        else:
-            jobs = JobInfo.objects(listing_date__lte=end_time_datetime,
-                                   listing_date__gte=start_time_datetime,
-                                   title__icontains=key_word)
+        jobs=get_jobs_from_url(start_time_stamp, end_time_stamp, key_word, location)
 
         jobs_stat=np.ndarray(shape=(len(jobs), 1), dtype=np.float)
         for (i,job) in enumerate(jobs):
             jobs_stat[i]=time.mktime(job.listing_date.timetuple())
+        deta_days = datetime.timedelta(seconds=end_time_stamp - start_time_stamp).days
         hist_day, bin_edges=np.histogram(jobs_stat,bins=deta_days)
 
         def count_period(start_day,stat,days):
@@ -118,5 +124,64 @@ class AnalyzeJobCount(APIView):
         hist_day_dict={"day":day_stat,"week":week_stat,"month":month_stat,"year":year_stat}
         return Response(hist_day_dict)
 
+
+class AnalyzeJobSalary(APIView):
+    """
+    View to list all users in the system.
+
+    * Requires token authentication.
+    * Only admin users are able to access this view.
+    """
+    def get(self, request, start_time, end_time, key_word, location, format=None):
+        """
+        Return a list of all users.
+        http://127.0.0.1:8000/jobInfo/analyze/count/2016-06-03/2016-07-04/front/sydney
+        """
+        start_time_stamp = time.mktime(time.strptime(start_time, "%Y-%m-%d"))
+        end_time_stamp = time.mktime(time.strptime(end_time, "%Y-%m-%d"))
+        jobs = get_jobs_from_url(start_time_stamp, end_time_stamp, key_word, location)
+
+        salary_list = [job.salary_index for job in jobs if job.salary_index!=0]
+        day_stat = {}
+        week_stat = {}
+        month_stat = {}
+        year_stat = {}
+
+        def count_period(start_day,stat,job_salary):
+            # This function is to compute job number within a span, given start day
+            start_day_str = start_day.strftime("%Y-%m-%d")
+            if start_day_str in stat.keys():
+                pass
+            else:
+                stat[start_day_str] = []
+            stat[start_day_str].append(job_salary)
+
+        for job in jobs:
+            job_salary = job.salary_index
+            if job_salary == 0:
+                continue
+            jobs_time = job.listing_date
+
+            count_period(start_day=jobs_time,
+                         stat=day_stat,
+                         job_salary=job_salary)
+            # the first day of a week
+            count_period(start_day=jobs_time - datetime.timedelta(days=jobs_time.weekday()),
+                         stat=week_stat,
+                         job_salary=job_salary)
+            # the first day of a month
+            count_period(start_day=jobs_time - datetime.timedelta(days=int(jobs_time.strftime("%d")) - 1),
+                         stat=month_stat,
+                         job_salary=job_salary)
+            # the first day of a year
+            count_period(start_day=datetime.datetime(year=jobs_time.year, month=1, day=1),
+                         stat=year_stat,
+                         job_salary=job_salary)
+
+        hist_day_dict = {"day": day_stat, "week": week_stat, "month": month_stat, "year": year_stat}
+        for hist in hist_day_dict:
+            for key in hist_day_dict[hist]:
+                hist_day_dict[hist][key]=int(np.average(hist_day_dict[hist][key]))
+        return Response(hist_day_dict)
 # print("haha")
 # job_serializer=JobInfoSerializer(jobs, many=True)

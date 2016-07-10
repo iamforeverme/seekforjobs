@@ -5,7 +5,7 @@ from web import settings
 from django.test import SimpleTestCase
 from rest_framework.test import APIRequestFactory
 import time,datetime
-from views import AnalyzeJobCount
+from views import AnalyzeJobCount,AnalyzeJobSalary
 
 class JobInfoTestCase(SimpleTestCase):
     mongodb_name = 'testsuite'
@@ -91,4 +91,29 @@ class JobInfoTestCase(SimpleTestCase):
                         format='json')
         response.render()
         expected_result = '{"week":{"2016-06-13":2},"year":{"2016-01-01":2},"day":{"2016-06-16":1,"2016-06-15":0},"month":{"2016-06-01":2}}'
+        self.assertEqual(expected_result, response.content)
+
+    def test_analyze_job_salary(self):
+        JobInfo.objects.create(_id=self.get_test_id(),
+                               title="Front software engineer",
+                               location="All Sydney",
+                               salary_index="750000",
+                               listing_date=datetime.datetime(year=2016, month=6, day=15)
+                               )
+
+        JobInfo.objects.create(_id=self.get_test_id(),
+                           title="Backend software engineer",
+                           location="Merben",
+                           salary_index="950000",
+                           listing_date=datetime.datetime(year=2016, month=6, day=17)
+                           )
+
+        view = AnalyzeJobSalary.as_view()
+        factory = APIRequestFactory()
+        request = factory.get(r'/jobInfo/analyze/salary')
+        response = view(request, start_time='2016-06-03', end_time='2016-07-04', key_word="all", location='all',
+                        format='json')
+        response.render()
+        # the accurateness of the algorithm could be improved in the future
+        expected_result = '{"week":{"2016-06-13":850000},"year":{"2016-01-01":850000},"day":{"2016-06-17":950000,"2016-06-15":750000},"month":{"2016-06-01":850000}}'
         self.assertEqual(expected_result, response.content)

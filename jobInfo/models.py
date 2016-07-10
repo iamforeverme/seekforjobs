@@ -8,6 +8,7 @@ class JobInfo(Document):
     location = StringField(max_length=100, blank=True, default='')
     sublocation = StringField(max_length=100, blank=True, default='')
     salary_range = StringField(max_length=100, blank=True, default='')
+    salary_index = IntField()
     url = StringField(max_length=100, blank=True, default='')
 
     meta = {"collection": "scrapy_items"}
