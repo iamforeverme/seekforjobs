@@ -1,13 +1,13 @@
 import * as actions from "constants/actions";
 import {combineReducers} from 'redux';
 
-const defaultJobData = {
+const defaultAreaData = {
     day: {},
     week: {},
     month: {},
     year: {}
 }
-export function job(state=defaultJobData, action){
+export function job(state=defaultAreaData, action){
     switch (action.type) {
         case actions.UPDATE_JOB_DATA:
             if(action.error){
@@ -22,8 +22,16 @@ export function job(state=defaultJobData, action){
     }
 }
 
-export function income(state=[], action){
+export function income(state=defaultAreaData, action){
     switch (action.type) {
+        case actions.UPDATE_INCOME_DATA:
+            if(action.error){
+                return state;
+            }
+            else {
+                return action.payload;
+            }
+            break;
         default:
             return state;
     }

@@ -1,6 +1,6 @@
 import AppContainer from "containers/App";
 import SearchBoxContainer from 'containers/SearchBox';
-import AreaTrend from 'components/AreaTrend';
+import AreaTrendContainer from 'containers/AreaTrend';
 import {Router, Route, IndexRoute, Link, browserHistory} from 'react-router';
 
 class Routes extends React.Component {
@@ -16,7 +16,7 @@ class Routes extends React.Component {
                             }, "area");
                         }
                     } />*/}
-                    <Route path="area" component={AreaTrend} />
+                    <Route path="area" component={AreaTrendContainer} />
                 </Route>
             </Router>
         );

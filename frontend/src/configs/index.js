@@ -5,6 +5,7 @@ import thunk from "redux-thunk";
 import {logger, request} from "../middlewares";
 
 export const middlewares = [thunk, logger, request];
+export const baseURL = "http://localhost:8000";
 export default {
 	middlewares
 }

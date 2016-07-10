@@ -21,7 +21,7 @@ export function location(state='', action){
     }
 }
 
-export function period(state='', action){
+export function period(state='week', action){
     switch (action.type) {
         case actions.CHANGE_PERIOD:
             return action.payload;
