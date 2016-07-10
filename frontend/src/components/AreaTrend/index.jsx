@@ -10,7 +10,7 @@ export default class AreaTrend extends React.Component{
         return (
             <div>
                 <SearchBarContainer />
-                <AreaChartContainer />
+                {/*<AreaChartContainer />*/}
                 <EmploymentChartContainer />
                 <IncomeChart />
             </div>
